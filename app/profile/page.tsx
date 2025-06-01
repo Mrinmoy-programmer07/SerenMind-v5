@@ -81,9 +81,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-gray-900 text-[#333333] dark:text-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-[#FAFAFA] to-[#F5E1DA]/30 dark:from-gray-900 dark:to-gray-800 text-[#333333] dark:text-gray-100">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-[#6A9FB5]/10 py-4 px-6 sticky top-0 z-10 shadow-sm">
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-[#6A9FB5]/10 py-4 px-6 sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
           <div className="flex items-center space-x-4">
             <Button
@@ -94,7 +94,7 @@ export default function ProfilePage() {
             >
               <ArrowLeft size={20} className="text-[#6A9FB5]" />
             </Button>
-            <h1 className="font-semibold text-xl">Profile Settings</h1>
+            <h1 className="font-semibold text-xl bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">Profile Settings</h1>
           </div>
           {isEditing ? (
             <div className="flex items-center space-x-2">
@@ -109,7 +109,7 @@ export default function ProfilePage() {
               </Button>
               <Button
                 size="sm"
-                className="bg-[#6A9FB5] hover:bg-[#A3D9A5] text-white transition-colors"
+                className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] hover:from-[#A3D9A5] hover:to-[#6A9FB5] text-white transition-all duration-300 shadow-md hover:shadow-lg"
                 onClick={handleSaveProfile}
                 disabled={isSaving}
               >
@@ -126,7 +126,7 @@ export default function ProfilePage() {
           ) : (
             <Button
               size="sm"
-              className="bg-[#6A9FB5] hover:bg-[#A3D9A5] text-white transition-colors"
+              className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] hover:from-[#A3D9A5] hover:to-[#6A9FB5] text-white transition-all duration-300 shadow-md hover:shadow-lg"
               onClick={() => setIsEditing(true)}
             >
               Edit Profile
@@ -139,39 +139,65 @@ export default function ProfilePage() {
         <main className="container mx-auto px-4 py-8 max-w-5xl pb-20">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Profile Summary Card */}
-            <Card className="md:w-1/3 border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
+            <Card className="md:w-1/3 border-[#6A9FB5]/20 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex flex-col items-center">
-                  <Avatar className="w-24 h-24 mb-4">
-                    <AvatarImage
-                      src={user?.photoURL || "/placeholder.svg?height=96&width=96"}
-                      alt={user?.displayName || "User"}
-                    />
-                    <AvatarFallback className="bg-[#6A9FB5] text-white text-xl">
-                      {user?.displayName?.charAt(0) || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h2 className="text-xl font-semibold mb-1">{user?.displayName || "Anonymous User"}</h2>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">{user?.email || "No email provided"}</p>
+                  <div className="relative mb-6">
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] blur-sm"></div>
+                    <Avatar className="w-32 h-32 border-4 border-white dark:border-gray-800">
+                      <AvatarImage
+                        src={user?.photoURL || "/placeholder.svg?height=128&width=128"}
+                        alt={user?.displayName || "User"}
+                        className="object-cover"
+                      />
+                      <AvatarFallback className="bg-[#6A9FB5] text-white text-2xl">
+                        {user?.displayName?.charAt(0) || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
+                  
+                  <h2 className="text-2xl font-semibold mb-1 bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">{user?.displayName || "Anonymous User"}</h2>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">{user?.email || "No email provided"}</p>
 
-                  <div className="w-full space-y-4 mt-4">
-                    <div className="flex justify-between items-center p-3 bg-[#F5E1DA]/30 dark:bg-gray-800 rounded-lg">
-                      <span className="text-sm font-medium">Member Since</span>
-                      <span className="text-sm">June 2023</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-[#A3D9A5]/20 dark:bg-gray-800 rounded-lg">
-                      <span className="text-sm font-medium">Mood Entries</span>
-                      <span className="text-sm">42</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-[#6A9FB5]/20 dark:bg-gray-800 rounded-lg">
-                      <span className="text-sm font-medium">Chat Sessions</span>
-                      <span className="text-sm">15</span>
+                  {/* Quick Actions */}
+                  <div className="grid grid-cols-2 gap-3 w-full mb-6">
+                    <Button
+                      variant="outline"
+                      className="h-auto py-3 border-[#6A9FB5]/30 text-[#6A9FB5] hover:bg-[#F5E1DA]/30 hover:text-[#6A9FB5] transition-colors"
+                      onClick={() => startTransition("/mood-tracker")}
+                    >
+                      <BarChart3 size={16} className="mr-2" />
+                      Track Mood
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-auto py-3 border-[#A3D9A5]/30 text-[#A3D9A5] hover:bg-[#A3D9A5]/30 hover:text-[#A3D9A5] transition-colors"
+                      onClick={() => startTransition("/chat")}
+                    >
+                      <Send size={16} className="mr-2" />
+                      Start Chat
+                    </Button>
+                  </div>
+
+                  {/* Daily Quote */}
+                  <div className="w-full mb-6 p-4 rounded-xl bg-gradient-to-br from-[#6A9FB5]/10 to-[#A3D9A5]/10 dark:from-gray-800 dark:to-gray-700">
+                    <p className="text-sm italic text-gray-600 dark:text-gray-400 mb-2">"The present moment is filled with joy and happiness. If you are attentive, you will see it."</p>
+                    <p className="text-xs text-[#6A9FB5]">- Thich Nhat Hanh</p>
+                  </div>
+
+                  {/* Wellness Tips */}
+                  <div className="w-full space-y-3 mb-6">
+                    <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Today's Wellness Tip</h3>
+                    <div className="p-3 rounded-lg bg-[#F5E1DA]/20 dark:bg-gray-800/50">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Take a moment to practice deep breathing. Inhale for 4 counts, hold for 4, exhale for 4. Repeat 3 times.
+                      </p>
                     </div>
                   </div>
 
                   <Button
                     variant="outline"
-                    className="w-full mt-6 border-[#6A9FB5]/30 text-[#6A9FB5] hover:bg-[#F5E1DA]/30 hover:text-[#6A9FB5] transition-colors"
+                    className="w-full border-[#6A9FB5]/30 text-[#6A9FB5] hover:bg-[#F5E1DA]/30 hover:text-[#6A9FB5] transition-colors"
                     onClick={handleSignOut}
                   >
                     <LogOut size={16} className="mr-2" />
@@ -184,17 +210,16 @@ export default function ProfilePage() {
             {/* Settings Tabs */}
             <div className="flex-1">
               <Tabs defaultValue="account" onValueChange={setActiveTab}>
-                <TabsList className="bg-[#F5E1DA]/30 dark:bg-gray-800 w-full justify-start mb-6">
-                  <TabsTrigger value="account">Account</TabsTrigger>
-                  <TabsTrigger value="notifications">Notifications</TabsTrigger>
-                  <TabsTrigger value="appearance">Appearance</TabsTrigger>
-                  <TabsTrigger value="privacy">Privacy</TabsTrigger>
+                <TabsList className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-[#6A9FB5]/10 w-full justify-start mb-6 shadow-md">
+                  <TabsTrigger value="account" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#6A9FB5] data-[state=active]:to-[#A3D9A5] data-[state=active]:text-white">Account</TabsTrigger>
+                  <TabsTrigger value="appearance" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#6A9FB5] data-[state=active]:to-[#A3D9A5] data-[state=active]:text-white">Appearance</TabsTrigger>
+                  <TabsTrigger value="privacy" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#6A9FB5] data-[state=active]:to-[#A3D9A5] data-[state=active]:text-white">Privacy</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="account" className="space-y-4">
-                  <Card className="border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
+                  <Card className="border-[#6A9FB5]/20 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle>Account Information</CardTitle>
+                      <CardTitle className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">Account Information</CardTitle>
                       <CardDescription>Update your personal details</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -206,7 +231,7 @@ export default function ProfilePage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             disabled={!isEditing}
-                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5]"
+                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5] bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                           />
                           <User
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -224,7 +249,7 @@ export default function ProfilePage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={!isEditing}
-                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5]"
+                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5] bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                           />
                           <Mail
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -241,7 +266,7 @@ export default function ProfilePage() {
                             type="password"
                             value="••••••••"
                             disabled
-                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5]"
+                            className="pl-10 border-[#6A9FB5]/30 focus-visible:ring-[#6A9FB5] bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                           />
                           <Lock
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -250,7 +275,7 @@ export default function ProfilePage() {
                         </div>
                         <Button
                           variant="link"
-                          className="text-[#6A9FB5] p-0 h-auto text-sm"
+                          className="text-[#6A9FB5] p-0 h-auto text-sm hover:text-[#A3D9A5] transition-colors"
                           onClick={() => {
                             toast({
                               title: "Password Reset",
@@ -264,34 +289,13 @@ export default function ProfilePage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
+                  <Card className="border-[#6A9FB5]/20 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle>Data Management</CardTitle>
+                      <CardTitle className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">Data Management</CardTitle>
                       <CardDescription>Manage your personal data</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="font-medium">Export Your Data</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Download all your data in JSON format
-                          </p>
-                        </div>
-                        <Button
-                          variant="outline"
-                          className="border-[#6A9FB5]/30 text-[#6A9FB5] hover:bg-[#F5E1DA]/30 hover:text-[#6A9FB5] transition-colors"
-                          onClick={() => {
-                            toast({
-                              title: "Data Export Started",
-                              description: "Your data is being prepared for download.",
-                            })
-                          }}
-                        >
-                          Export
-                        </Button>
-                      </div>
-
-                      <div className="flex justify-between items-center pt-4 border-t border-[#6A9FB5]/10">
                         <div>
                           <h4 className="font-medium text-destructive">Delete Account</h4>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -315,94 +319,10 @@ export default function ProfilePage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="notifications" className="space-y-4">
-                  <Card className="border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
-                    <CardHeader>
-                      <CardTitle>Notification Preferences</CardTitle>
-                      <CardDescription>Manage how you receive notifications</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="font-medium">Email Notifications</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Receive notifications via email</p>
-                          </div>
-                          <Switch
-                            checked={notifications.email}
-                            onCheckedChange={(checked) => setNotifications({ ...notifications, email: checked })}
-                            disabled={!isEditing}
-                          />
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="font-medium">App Notifications</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Receive in-app notifications</p>
-                          </div>
-                          <Switch
-                            checked={notifications.app}
-                            onCheckedChange={(checked) => setNotifications({ ...notifications, app: checked })}
-                            disabled={!isEditing}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="pt-4 border-t border-[#6A9FB5]/10 space-y-4">
-                        <h4 className="font-medium">Notification Types</h4>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-sm font-medium">Daily Mood Reminders</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
-                              Reminders to check in with your mood
-                            </p>
-                          </div>
-                          <Switch
-                            checked={notifications.moodReminders}
-                            onCheckedChange={(checked) =>
-                              setNotifications({ ...notifications, moodReminders: checked })
-                            }
-                            disabled={!isEditing}
-                          />
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-sm font-medium">Weekly Progress Report</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
-                              Summary of your weekly mood patterns
-                            </p>
-                          </div>
-                          <Switch
-                            checked={notifications.weeklyReport}
-                            onCheckedChange={(checked) => setNotifications({ ...notifications, weeklyReport: checked })}
-                            disabled={!isEditing}
-                          />
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-sm font-medium">New Features & Updates</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
-                              Information about new app features
-                            </p>
-                          </div>
-                          <Switch
-                            checked={notifications.newFeatures}
-                            onCheckedChange={(checked) => setNotifications({ ...notifications, newFeatures: checked })}
-                            disabled={!isEditing}
-                          />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
                 <TabsContent value="appearance" className="space-y-4">
-                  <Card className="border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
+                  <Card className="border-[#6A9FB5]/20 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle>Appearance Settings</CardTitle>
+                      <CardTitle className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">Appearance Settings</CardTitle>
                       <CardDescription>Customize how SerenMind looks</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -412,7 +332,11 @@ export default function ProfilePage() {
                         <div className="grid grid-cols-2 gap-4">
                           <Button
                             variant="outline"
-                            className={`h-auto py-6 flex flex-col items-center justify-center gap-2 rounded-xl ${theme === "light" ? "border-[#6A9FB5] bg-[#F5E1DA]/30" : "border-[#6A9FB5]/30"}`}
+                            className={`h-auto py-6 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300 ${
+                              theme === "light"
+                                ? "border-[#6A9FB5] bg-gradient-to-r from-[#6A9FB5]/20 to-[#A3D9A5]/20 shadow-md"
+                                : "border-[#6A9FB5]/30 hover:border-[#6A9FB5]"
+                            }`}
                             onClick={() => setTheme("light")}
                           >
                             <Sun size={24} className={theme === "light" ? "text-[#6A9FB5]" : ""} />
@@ -421,7 +345,11 @@ export default function ProfilePage() {
 
                           <Button
                             variant="outline"
-                            className={`h-auto py-6 flex flex-col items-center justify-center gap-2 rounded-xl ${theme === "dark" ? "border-[#6A9FB5] bg-[#6A9FB5]/20" : "border-[#6A9FB5]/30"}`}
+                            className={`h-auto py-6 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300 ${
+                              theme === "dark"
+                                ? "border-[#6A9FB5] bg-gradient-to-r from-[#6A9FB5]/20 to-[#A3D9A5]/20 shadow-md"
+                                : "border-[#6A9FB5]/30 hover:border-[#6A9FB5]"
+                            }`}
                             onClick={() => setTheme("dark")}
                           >
                             <Moon size={24} className={theme === "dark" ? "text-[#6A9FB5]" : ""} />
@@ -429,46 +357,14 @@ export default function ProfilePage() {
                           </Button>
                         </div>
                       </div>
-
-                      <div className="pt-4 border-t border-[#6A9FB5]/10 space-y-4">
-                        <h4 className="font-medium">Voice Assistant Settings</h4>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-sm font-medium">Enable Voice Responses</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">AI responses will be read aloud</p>
-                          </div>
-                          <Switch
-                            checked={true}
-                            onCheckedChange={(checked) => {
-                              toast({
-                                title: checked ? "Voice Enabled" : "Voice Disabled",
-                                description: checked
-                                  ? "AI responses will be read aloud."
-                                  : "AI responses will not be read aloud.",
-                              })
-                            }}
-                          />
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-sm font-medium">Voice Speed</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Adjust how fast the voice speaks</p>
-                          </div>
-                          <div className="w-32">
-                            <Slider defaultValue={[0.9]} max={1.5} min={0.5} step={0.1} className="w-full" />
-                          </div>
-                        </div>
-                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
                 <TabsContent value="privacy" className="space-y-4">
-                  <Card className="border-[#6A9FB5]/20 shadow-md hover:shadow-lg transition-all duration-300">
+                  <Card className="border-[#6A9FB5]/20 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle>Privacy Settings</CardTitle>
+                      <CardTitle className="bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] bg-clip-text text-transparent">Privacy Settings</CardTitle>
                       <CardDescription>Manage your privacy preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -515,7 +411,7 @@ export default function ProfilePage() {
                       <div className="pt-4 border-t border-[#6A9FB5]/10">
                         <Button
                           variant="link"
-                          className="text-[#6A9FB5] p-0 h-auto text-sm"
+                          className="text-[#6A9FB5] p-0 h-auto text-sm hover:text-[#A3D9A5] transition-colors"
                           onClick={() => {
                             toast({
                               title: "Privacy Policy",

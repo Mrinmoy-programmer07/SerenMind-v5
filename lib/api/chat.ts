@@ -48,6 +48,33 @@ async function fetchGoogleAiResponse(userMessage: string): Promise<string> {
 
   const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
 
+  // First, detect the language of the user's message
+  const languageDetectionPrompt = `Detect the language of the following text and respond with ONLY the ISO 639-1 language code (e.g., 'en' for English, 'es' for Spanish, etc.):
+
+${userMessage}`;
+
+  const languageDetectionResponse = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contents: [{
+        parts: [{ text: languageDetectionPrompt }]
+      }],
+      generationConfig: {
+        temperature: 0.1,
+        topK: 1,
+        topP: 0.1,
+        maxOutputTokens: 10,
+      }
+    })
+  });
+
+  const languageData = await languageDetectionResponse.json();
+  const detectedLanguage = languageData.candidates[0].content.parts[0].text.trim().toLowerCase();
+
+  // Now generate the response in the detected language
   const requestBody = {
     contents: [{
       parts: [{
@@ -57,7 +84,8 @@ async function fetchGoogleAiResponse(userMessage: string): Promise<string> {
 3. Focused on emotional well-being
 4. Brief and to the point
 5. Free of medical advice or diagnoses
-6. Response should be in more crisp , witty and engaging manner
+6. Response should be in more crisp, witty and engaging manner
+7. IMPORTANT: Respond in the same language as the user's message (${detectedLanguage})
 
 User message: ${userMessage}
 

@@ -171,15 +171,6 @@ export default function DashboardPage() {
             <h1 className="font-semibold text-xl">Dashboard</h1>
           </div>
           <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-[#6A9FB5] text-[#6A9FB5] hover:bg-[#F5E1DA]/50 hover:text-[#6A9FB5] transition-colors"
-              onClick={handleExportData}
-            >
-              <Download size={16} className="mr-1" />
-              <span className="hidden sm:inline">Export Data</span>
-            </Button>
           </div>
         </div>
       </header>

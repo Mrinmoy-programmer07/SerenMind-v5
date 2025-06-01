@@ -1,30 +1,15 @@
 "use client"
 
-import { useEffect } from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type { Message } from "@/lib/types"
 import { formatTime } from "@/lib/utils"
-import { useVoiceAssistant } from "@/lib/hooks/use-voice-assistant"
 
 interface ChatBubbleProps {
   message: Message
-  isSpeechEnabled: boolean
 }
 
-export function ChatBubble({ message, isSpeechEnabled }: ChatBubbleProps) {
-  const { speak } = useVoiceAssistant({
-    enabled: isSpeechEnabled,
-    pitch: 1.1, // Slightly higher pitch for female voice
-    rate: 0.9, // Slightly slower for soothing effect
-  })
-
-  useEffect(() => {
-    if (message.sender === "ai" && isSpeechEnabled) {
-      speak(message.content)
-    }
-  }, [message, isSpeechEnabled, speak])
-
+export function ChatBubble({ message }: ChatBubbleProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
