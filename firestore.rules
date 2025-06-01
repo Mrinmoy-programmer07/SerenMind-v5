@@ -29,7 +29,10 @@ service cloud.firestore {
 
     // Users collection
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      // Allow reading user count for authenticated users
+      allow list: if isAuthenticated();
+      // Allow read/write of specific user document only to the owner
+      allow get, write: if isOwner(userId);
 
       // User's mood entries
       match /mood_entries/{entryId} {

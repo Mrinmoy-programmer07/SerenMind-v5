@@ -22,6 +22,7 @@ import { MoodCalendar } from "@/components/dashboard/mood-calendar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useRouter } from "next/navigation"
 import { useWellnessMetrics } from "@/lib/hooks/use-wellness-metrics"
+import { UserCountBubble } from "@/components/dashboard/user-count-bubble"
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -287,6 +288,9 @@ export default function DashboardPage() {
           )}
         </main>
       </ScrollArea>
+
+      {/* User Count Bubble */}
+      <UserCountBubble />
 
       {/* Mobile Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-[#6A9FB5]/10 py-2 z-10">
