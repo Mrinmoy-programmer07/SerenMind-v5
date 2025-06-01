@@ -7,17 +7,29 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Helper function to check if user is accessing their own data
+    // Helper function to check if user owns the document
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    // Rules for conversations collection
+    match /conversations/{conversationId} {
+      // Allow read if user owns the conversation
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Allow create if user is authenticated and sets themselves as owner
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      // Allow update if user owns the conversation
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Allow delete if user owns the conversation
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
     // Users collection
     match /users/{userId} {
-      allow read: if isOwner(userId);
-      allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isOwner(userId);
-      allow delete: if isOwner(userId);
+      allow read, write: if isOwner(userId);
 
       // User's mood entries
       match /mood_entries/{entryId} {
@@ -31,6 +43,11 @@ service cloud.firestore {
 
       // User's music preferences
       match /music_preferences/{prefId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // User's chat history
+      match /chats/{chatId} {
         allow read, write: if isOwner(userId);
       }
     }

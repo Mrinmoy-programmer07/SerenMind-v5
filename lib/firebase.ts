@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, type Firestore } from "firebase/firestore";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -56,7 +56,7 @@ if (missingFields.length > 0) {
 
 // Initialize Firebase
 let app;
-let db;
+let db: Firestore | null;
 let auth: Auth | null;
 let provider;
 let storage;

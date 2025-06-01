@@ -1,9 +1,7 @@
 // This file contains the chat API functions
 // In a real implementation, these would interact with a backend service
 
-import type { Message } from "@/lib/types";
-import MoodGraph from '@/components/MoodGraph';
-import { Auth, getAuth } from 'firebase/auth';
+import type { Message } from "@/lib/types/chat";
 import { auth } from '@/lib/firebase';
 import { analyzeAndSaveChatMetrics } from './mental-metrics';
 
@@ -22,7 +20,7 @@ export async function getChatHistory(userId: string): Promise<Message[]> {
     {
       id: "1",
       content: "Hello! I'm SerenMind, your AI wellness companion.  How are you feeling today?",
-      sender: "ai",
+      role: "assistant",
       timestamp: new Date(Date.now() - 60000),
     },
   ];
@@ -33,7 +31,7 @@ export async function sendMessage(userId: string, content: string): Promise<Mess
   const userMessage: Message = {
     id: Date.now().toString(),
     content,
-    sender: "user",
+    role: "user",
     timestamp: new Date(),
   };
   return userMessage;
@@ -46,12 +44,11 @@ async function fetchGoogleAiResponse(userMessage: string): Promise<string> {
     throw new Error("Google API key is missing. Please check your environment variables.");
   }
 
+  // Use the correct model name for public API
   const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
 
   // First, detect the language of the user's message
-  const languageDetectionPrompt = `Detect the language of the following text and respond with ONLY the ISO 639-1 language code (e.g., 'en' for English, 'es' for Spanish, etc.):
-
-${userMessage}`;
+  const languageDetectionPrompt = `Detect the language of the following text and respond with ONLY the ISO 639-1 language code (e.g., 'en' for English, 'es' for Spanish, etc.):\n\n${userMessage}`;
 
   const languageDetectionResponse = await fetch(apiUrl, {
     method: "POST",
@@ -72,7 +69,7 @@ ${userMessage}`;
   });
 
   const languageData = await languageDetectionResponse.json();
-  const detectedLanguage = languageData.candidates[0].content.parts[0].text.trim().toLowerCase();
+  const detectedLanguage = languageData.candidates?.[0]?.content?.parts?.[0]?.text?.trim().toLowerCase() || 'en';
 
   // Now generate the response in the detected language
   const requestBody = {
@@ -193,7 +190,7 @@ export async function getAiResponse(userId: string, userMessage: string): Promis
       return {
         id: Date.now().toString(),
         content: "I'm currently unable to respond due to a configuration issue. Please try again later.",
-        sender: "ai",
+        role: "assistant",
         timestamp: new Date(),
       };
     }
@@ -215,7 +212,7 @@ export async function getAiResponse(userId: string, userMessage: string): Promis
     const aiMessage: Message = {
       id: Date.now().toString(),
       content: aiResponse,
-      sender: "ai",
+      role: "assistant",
       timestamp: new Date(),
     };
 
@@ -237,8 +234,8 @@ export async function getAiResponse(userId: string, userMessage: string): Promis
     return {
       id: Date.now().toString(),
       content: errorMessage,
-      sender: "ai",
+      role: "assistant",
       timestamp: new Date(),
     };
   }
-}
+} 
