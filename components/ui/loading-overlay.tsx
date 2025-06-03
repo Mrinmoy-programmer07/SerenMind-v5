@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import Image from "next/image"
 
 interface LoadingOverlayProps {
   isLoading: boolean
@@ -26,10 +27,21 @@ export function LoadingOverlay({ isLoading, message = "Loading..." }: LoadingOve
         transition={{ duration: 0.3 }}
         className="flex flex-col items-center"
       >
-        <div className="w-16 h-16 rounded-full bg-gradient-to-r from-[#6A9FB5] to-[#A3D9A5] flex items-center justify-center mb-4">
-          <span className="text-white font-bold text-2xl">S</span>
-        </div>
-        <LoadingSpinner size="lg" className="text-[#6A9FB5] mb-4" />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, 5, -5, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="w-20 h-20 mb-4"
+        >
+          <Image src="/logo.svg" alt="SerenMind Logo" width={80} height={80} />
+        </motion.div>
+        <LoadingSpinner size="lg" className="text-[#34D399] mb-4" />
         <p className="text-gray-600 dark:text-gray-400">{message}</p>
       </motion.div>
     </motion.div>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Definitions for gradients and filters -->
+    <defs>
+        <!-- White gradient for blending -->
+        <linearGradient id="whiteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#34D399;stop-opacity:0.95" />
+            <stop offset="100%" style="stop-color:#10B981;stop-opacity:0.85" />
+        </linearGradient>
+        
+        <!-- Glow effect -->
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+    </defs>
+    
+    <!-- Organic leaf pattern -->
+    <g transform="translate(100,100)">
+        <!-- Main leaf with gradient -->
+        <path d="M0 -60 
+                 C20 -40 40 -20 40 0 
+                 C40 20 20 40 0 40 
+                 C-20 40 -40 20 -40 0 
+                 C-40 -20 -20 -40 0 -60" 
+              fill="url(#whiteGradient)" 
+              opacity="0.85" />
+        
+        <!-- Inner details with softer lines -->
+        <path d="M0 -40 
+                 C15 -25 25 -15 25 0 
+                 C25 15 15 25 0 25 
+                 C-15 25 -25 15 -25 0 
+                 C-25 -15 -15 -25 0 -40" 
+              fill="none" 
+              stroke="#34D399" 
+              stroke-width="1" 
+              opacity="0.5" />
+        
+        <!-- Subtle glow ring -->
+        <circle cx="0" cy="0" r="45" 
+                stroke="#34D399" 
+                stroke-width="0.8" 
+                fill="none" 
+                opacity="0.3" 
+                filter="url(#glow)" />
+    </g>
+</svg> 

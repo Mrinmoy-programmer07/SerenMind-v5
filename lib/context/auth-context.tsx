@@ -14,6 +14,8 @@ import {
 import { ensureUserDocument } from "@/lib/utils/firebase-utils";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { auth } from "@/lib/firebase";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface AuthContextType {
   user: User | null;
@@ -164,10 +166,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   if (!isInitialized) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" className="text-[#6A9FB5]" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col items-center"
+        >
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="w-20 h-20 mb-4"
+          >
+            <Image src="/logo.svg" alt="SerenMind Logo" width={80} height={80} />
+          </motion.div>
+          <LoadingSpinner size="lg" className="text-[#34D399] mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Initializing SerenMind...</p>
+        </motion.div>
       </div>
-    );
+    )
   }
 
   return (
